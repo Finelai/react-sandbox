@@ -7,15 +7,4 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   base: './',
   plugins: [react(), tsconfigPaths(), tailwindcss()],
-  build: {
-    target: 'es2015',
-    outDir: 'dist',
-    rollupOptions: {
-      input: './index.html',
-      output: {
-        format: 'iife',
-        entryFileNames: `[name].js`,
-      },
-    },
-  },
 })
