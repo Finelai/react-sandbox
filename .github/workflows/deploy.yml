@@ -1,7 +1,7 @@
 name: Deploy React Sandbox to GP
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -26,5 +26,8 @@ jobs:
       - name: Build project using Vite
         run: npm run build
 
-      - name: Deploy React Sandbox to GP
-        uses: actions/deploy-pages@v2
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
