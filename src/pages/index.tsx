@@ -14,4 +14,4 @@ export const Router: FC = () => (
     <Route path={ROUTE_CONSTANTS.PRODUCT} element={<ProductsPage />} />
     <Route path={ROUTE_CONSTANTS.NOT_FOUND} element={<NotFound />} />
   </Routes>
-);
+)

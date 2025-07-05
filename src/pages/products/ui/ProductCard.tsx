@@ -8,10 +8,17 @@ type TProductCard = {
   imageUrl: string
 }
 
-export const ProductCard: FC<TProductCard> = ({ title, origin, price, currency, imageUrl }): ReactElement => {
+export const ProductCard: FC<TProductCard> = ({
+  title,
+  origin,
+  price,
+  currency,
+  imageUrl,
+}): ReactElement => {
   const formatPrice = (priceInCents: number, currencyCode: string): string => {
     const priceInUnits = priceInCents / 100
-    const userLocale = navigator.languages && navigator.languages.length > 0
+    const userLocale =
+      navigator.languages && navigator.languages.length > 0
         ? navigator.languages[0]
         : navigator.language
 

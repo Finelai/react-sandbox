@@ -9,7 +9,7 @@ interface IProps {
 class ErrorBoundary extends Component<IProps> {
   state: ErrorState = {
     isError: false,
-  };
+  }
 
   static getDerivedStateFromError(): ErrorState {
     return { isError: true }
@@ -26,11 +26,7 @@ class ErrorBoundary extends Component<IProps> {
   }
 
   render(): ReactNode {
-    return this.state.isError ? (
-      <div>Oops</div>
-    ) : (
-      this.props.children
-    )
+    return this.state.isError ? <div>Oops</div> : this.props.children
   }
 }
 
