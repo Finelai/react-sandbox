@@ -1,28 +1,29 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react'
 
-type ErrorState = { isError: boolean }
+interface IErrorState {
+  isError: boolean
+}
 
 interface IProps {
   children: ReactNode
 }
 
 class ErrorBoundary extends Component<IProps> {
-  state: ErrorState = {
+  state: IErrorState = {
     isError: false,
   }
 
-  static getDerivedStateFromError(): ErrorState {
+  static getDerivedStateFromError(): IErrorState {
     return { isError: true }
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error(`Pay attention to the error. ${error}: ${errorInfo}`)
-  }
-
-  clearState = (): void => {
-    this.setState({
-      isError: false,
-    })
+    console.error(
+      'Pay attention to the error:',
+      error,
+      '\nError info:',
+      errorInfo,
+    )
   }
 
   render(): ReactNode {

@@ -11,7 +11,7 @@ export const ProductsPage: FC = (): ReactElement => {
 
       <div className="sm:flex gap-2">
         {PRODUCTS.map((item) => (
-          <ProductCard {...item} />
+          <ProductCard key={item.title} {...item} />
         ))}
       </div>
     </section>

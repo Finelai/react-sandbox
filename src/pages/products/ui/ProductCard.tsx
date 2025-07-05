@@ -1,6 +1,6 @@
 import type { FC, ReactElement } from 'react'
 
-type TProductCard = {
+interface IProductCard {
   title: string
   origin: string
   price: number
@@ -8,7 +8,7 @@ type TProductCard = {
   imageUrl: string
 }
 
-export const ProductCard: FC<TProductCard> = ({
+export const ProductCard: FC<IProductCard> = ({
   title,
   origin,
   price,
