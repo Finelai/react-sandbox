@@ -1,16 +1,14 @@
-import type { FC, ReactElement } from 'react'
+import { createRoot } from 'react-dom/client'
 
-import { ErrorBoundary } from '@shared/ui/error-boundary'
-import { Router } from '@pages/index'
+import Providers from './providers.tsx'
+import { Router } from './router'
 
-const App: FC = (): ReactElement => {
-  return (
-    <ErrorBoundary>
-      <div className="app-wrapper">
-        <Router />
-      </div>
-    </ErrorBoundary>
-  )
-}
+import './global.css'
 
-export default App
+createRoot(document.getElementById('root')!).render(
+  <Providers>
+    <div className="app-wrapper">
+      <Router />
+    </div>
+  </Providers>,
+)

@@ -3,9 +3,9 @@ import type { FC } from 'react'
 import { ROUTE_CONSTANTS } from '@shared/config'
 import { Route, Routes } from 'react-router'
 
-import { NotFound } from './not-found'
-import { HomePage } from './home'
-import { ProductsPage } from './products'
+import { NotFound } from '@pages/not-found'
+import { HomePage } from '@pages/home'
+import { ProductsPage } from '@pages/products'
 
 export const Router: FC = () => (
   <Routes>

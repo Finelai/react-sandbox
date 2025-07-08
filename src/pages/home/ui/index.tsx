@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 import reactLogo from '@assets/react.svg'
 import viteLogo from '/images/vite.svg'
 
-import '@shared/styles/home.css'
+import '../styles/home.css'
 
 function HomePage() {
   return (
