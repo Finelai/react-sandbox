@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 
-import { ROUTE_CONSTANTS } from '@shared/config'
+import { ROUTE_CONSTANTS } from '@shared/consts'
 import { Route, Routes } from 'react-router'
 
 import { NotFound } from '@pages/not-found'

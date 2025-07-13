@@ -1,6 +1,6 @@
 import type { FC, ReactElement } from 'react'
 
-import { NOT_FOUND_TEXT } from '@shared/config'
+import { NOT_FOUND_TEXT } from '@shared/consts'
 
 const NotFound: FC = (): ReactElement => (
   <div>

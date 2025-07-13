@@ -1,8 +1,6 @@
 import type { FC, ReactElement } from 'react'
 
-import { PRODUCTS } from '@shared/config'
-
-import { ProductCard } from './ProductCard'
+import { PRODUCTS, ProductCard } from '@entities/Product'
 
 export const ProductsPage: FC = (): ReactElement => {
   return (
