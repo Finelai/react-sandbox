@@ -1,9 +1,9 @@
 import { Link } from 'react-router'
 
+import { ROUTE_CONSTANTS } from '@shared/consts'
+
 import reactLogo from '@assets/react.svg'
 import viteLogo from '/images/vite.svg'
-
-import '../styles/home.css'
 
 function HomePage() {
   return (
@@ -26,10 +26,19 @@ function HomePage() {
         <h2>Pages:</h2>
 
         <div>
-          <Link to="/404">404</Link>
+          <Link to={ROUTE_CONSTANTS.NOT_FOUND}>
+            {ROUTE_CONSTANTS.NOT_FOUND.substring(1)}
+          </Link>
         </div>
         <div>
-          <Link to="/products">Products</Link>
+          <Link to={ROUTE_CONSTANTS.PRODUCT}>
+            {ROUTE_CONSTANTS.PRODUCT.substring(1)}
+          </Link>
+        </div>
+        <div>
+          <Link to={ROUTE_CONSTANTS.CALLS}>
+            {ROUTE_CONSTANTS.CALLS.substring(1)}
+          </Link>
         </div>
       </nav>
     </>

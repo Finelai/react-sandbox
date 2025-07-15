@@ -2,6 +2,10 @@
 
 @theme {
   --breakpoint-xs: 32rem;
+  --color-main-bg: #F1F4F9;
+  --color-table-bg: #ffffff;
+  --color-text-main: #122945;
+  --color-text-secondary: #5E7793;
 }
 
 :root {
