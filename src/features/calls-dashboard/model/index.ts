@@ -1,1 +1,6 @@
-export type { IOneCallData, ICallsData } from './types'
+export type {
+  IOneCallData,
+  ICallsData,
+  ICallsDataRaw,
+  TCallsScore,
+} from './types'

@@ -10,8 +10,8 @@ const queryClient = new QueryClient()
 const CallsDashboard: FC = (): ReactElement => {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="bg-main-bg text-text-main">
-        <h1>Звонки в период с по</h1>
+      <div className="bg-main-bg text-text-main text-center">
+        <h2 className="leading-10">Звонки в период с по</h2>
 
         <CallsTable />
       </div>

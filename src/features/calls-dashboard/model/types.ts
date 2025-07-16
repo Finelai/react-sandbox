@@ -1,8 +1,8 @@
-export interface IOneCallData {
+export interface IOneCallDataRaw {
   id: number
   partnership_id: string
   date: string
-  time: number
+  time: number // в секундах
   to_number: string
   status: 'Дозвонился' | 'Не дозвонился'
   record: string
@@ -11,6 +11,17 @@ export interface IOneCallData {
   person_name: string
   person_surname: string
   person_avatar: string
+}
+
+export interface ICallsDataRaw {
+  total_rows: number
+  results: IOneCallDataRaw[]
+}
+
+export type TCallsScore = '' | 'Отлично' | 'Хорошо' | 'Плохо'
+
+export interface IOneCallData extends IOneCallDataRaw {
+  score: TCallsScore
 }
 
 export interface ICallsData {
