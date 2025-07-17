@@ -28,3 +28,8 @@ export interface ICallsData {
   total_rows: number
   results: IOneCallData[]
 }
+
+export interface IDatesInterval {
+  start: string
+  end: string
+}

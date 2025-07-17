@@ -3,4 +3,5 @@ export type {
   ICallsData,
   ICallsDataRaw,
   TCallsScore,
+  IDatesInterval,
 } from './types'

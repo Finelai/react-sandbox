@@ -12,12 +12,13 @@ import {
 } from '@tanstack/react-table'
 
 import { fetchCallsHistory } from '../api'
-import { formatSecondsToMinutes } from '../lib'
+import { formatSecondsToMinutes, formatDate } from '../lib'
 import { CallType } from './CallType'
 import { CallScore } from './CallScore'
 import { SortIcon } from './SortIcon'
+import { CallsFilters } from './CallsFilters'
 
-import type { IOneCallData } from '../model'
+import type { IOneCallData, IDatesInterval } from '../model'
 
 const placeholderOneCellData: IOneCallData = {
   id: 0,
@@ -31,8 +32,19 @@ const placeholderOneCellData: IOneCallData = {
   source: '',
   person_name: '',
   person_surname: '',
-  person_avatar: '',
+  person_avatar: 'https://lk.skilla.ru/img/noavatar.jpg',
   score: 'Хорошо',
+}
+
+const defaultDateInterval = (): IDatesInterval => {
+  const today = new Date()
+  const twoDaysAgo = new Date(today)
+  twoDaysAgo.setDate(today.getDate() - 2)
+
+  return {
+    start: formatDate(twoDaysAgo),
+    end: formatDate(today),
+  }
 }
 
 const columnHelper = createColumnHelper<IOneCallData>()
@@ -45,6 +57,27 @@ const columns = [
   }),
   columnHelper.accessor('date', {
     header: 'Время',
+    cell: ({ cell }) => {
+      const dateString = cell.getValue()
+      if (dateString) {
+        const isoString = dateString.replace(' ', 'T')
+        const date = new Date(isoString)
+        const options: Intl.DateTimeFormatOptions = {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false, // чтобы использовать 24-часовой формат
+        }
+        const userLocale =
+          navigator.languages && navigator.languages.length > 0
+            ? navigator.languages[0]
+            : navigator.language
+
+        return new Intl.DateTimeFormat(userLocale, options).format(date)
+      }
+    },
     enableSorting: true,
   }),
   columnHelper.accessor('person_avatar', {
@@ -80,17 +113,26 @@ const columns = [
   }),
 ]
 
-const callsQueryOptions = (sort?: { id: string; desc: boolean }) =>
+const callsQueryOptions = (
+  datesInterval: IDatesInterval,
+  callDirection: string,
+  sort?: { id: string; desc: boolean },
+) =>
   queryOptions({
-    queryKey: ['calls', sort],
-    queryFn: () => fetchCallsHistory(sort),
+    queryKey: ['calls', datesInterval, callDirection, sort],
+    queryFn: () => fetchCallsHistory(datesInterval, callDirection, sort),
   })
 
 const CallsTable: FC = (): ReactElement => {
   const [sorting, setSorting] = useState<SortingState>([])
   const [cellsData, setCellsData] = useState<IOneCallData[]>()
+  const [callDirection, setCallDirection] = useState<string>('')
+  const [datesInterval, setDatesInterval] = useState<IDatesInterval>(
+    defaultDateInterval(),
+  )
+
   const sort = sorting.length > 0 ? sorting[0] : undefined
-  const query = useQuery(callsQueryOptions(sort))
+  const query = useQuery(callsQueryOptions(datesInterval, callDirection, sort))
   const table = useReactTable({
     data:
       cellsData ??
@@ -112,57 +154,68 @@ const CallsTable: FC = (): ReactElement => {
     if (data?.results) setCellsData(data.results)
   }, [data])
 
-  if (isPending) return <div>Loading...</div>
-
   if (error) return <div>Error: {error.message}</div>
 
   return (
-    <div className="inline-block bg-table-bg rounded-2xl shadow-md w-[95%] max-w-[1440px] pb-4 mb-16">
-      <div className="min-w-full">
-        <div>
-          {table?.getHeaderGroups().map((headerGroup) => (
-            <div
-              key={headerGroup.id}
-              className="grid grid-cols-1 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-4 sm:gap-6 items-center py-3 px-4 text-left text-xs font-normal text-text-secondary tracking-wider border-b border-gray-200 leading-6"
-            >
-              {headerGroup.headers.map((header) => {
-                const canSort = header.column.getCanSort()
-                const isSorted = header.column.getIsSorted()
+    <>
+      <CallsFilters
+        changeCallDirection={setCallDirection}
+        datesInterval={datesInterval}
+        setDatesInterval={setDatesInterval}
+      />
+      <div className="inline-block bg-table-bg rounded-2xl shadow-md w-[95%] max-w-[1440px] pb-4 mb-16">
+        <div className="min-w-full">
+          <div>
+            {table?.getHeaderGroups().map((headerGroup) => (
+              <div
+                key={headerGroup.id}
+                className="grid grid-cols-1 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-4 sm:gap-6 items-center py-3 px-4 text-left text-xs font-normal text-text-secondary tracking-wider border-b border-gray-200 leading-6"
+              >
+                {headerGroup.headers.map((header) => {
+                  const canSort = header.column.getCanSort()
+                  const isSorted = header.column.getIsSorted()
 
-                return (
-                  <div
-                    key={header.id}
-                    className={`truncate ${canSort ? 'cursor-pointer select-none' : ''}`}
-                    onClick={header.column.getToggleSortingHandler()}
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
+                  return (
+                    <div
+                      key={header.id}
+                      className={`truncate ${canSort ? 'cursor-pointer select-none' : ''}`}
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
 
-                    {canSort && <SortIcon isSorted={isSorted} />}
+                      {canSort && <SortIcon isSorted={isSorted} />}
+                    </div>
+                  )
+                })}
+              </div>
+            ))}
+          </div>
+          <div className="bg-white divide-y divide-gray-200 relative">
+            {isPending && (
+              <div className="absolute w-full h-full z-10 bg-[rgba(0,0,0,0.6)] flex items-center justify-center text-white">
+                Loading...
+              </div>
+            )}
+
+            {table?.getRowModel().rows.map((row) => (
+              <div
+                key={row.id}
+                className="grid grid-cols-1 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-4 sm:gap-6 items-center py-4 px-4 text-left text-sm text-gray-900 hover:bg-[#D4DFF32B]"
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <div key={cell.id} className="truncate">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </div>
-                )
-              })}
-            </div>
-          ))}
-        </div>
-        <div className="bg-white divide-y divide-gray-200">
-          {table?.getRowModel().rows.map((row) => (
-            <div
-              key={row.id}
-              className="grid grid-cols-1 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-4 sm:gap-6 items-center py-4 px-4 text-left text-sm text-gray-900"
-            >
-              {row.getVisibleCells().map((cell) => (
-                <div key={cell.id} className="truncate">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </div>
-              ))}
-            </div>
-          ))}
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
