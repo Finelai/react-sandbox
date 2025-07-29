@@ -158,6 +158,7 @@ const CallsTable: FC = (): ReactElement => {
 
   return (
     <>
+      <h1 id="calls-dashboard-title">Calls Dashboard</h1>
       <CallsFilters
         changeCallDirection={setCallDirection}
         datesInterval={datesInterval}

@@ -6,6 +6,7 @@ import tseslint from 'typescript-eslint'
 import { globalIgnores } from 'eslint/config'
 import reactX from 'eslint-plugin-react-x'
 import pluginQuery from '@tanstack/eslint-plugin-query'
+import playwright from 'eslint-plugin-playwright'
 
 export default tseslint.config([
   globalIgnores(['dist']),
@@ -16,6 +17,7 @@ export default tseslint.config([
       ...pluginQuery.configs['flat/recommended'],
       ...tseslint.configs.recommendedTypeChecked,
       ...tseslint.configs.stylisticTypeChecked,
+      ...playwright.configs['flat/recommended'],
       reactHooks.configs['recommended-latest'],
       reactRefresh.configs.vite,
       reactX.configs['recommended-typescript'],
