@@ -95,6 +95,7 @@ const columns = [
   }),
   columnHelper.accessor('to_number', {
     header: 'Звонок',
+    cell: ({ cell }) => <span className="to-number">{cell.getValue()}</span>,
     enableSorting: false,
   }),
   columnHelper.accessor('source', {
@@ -194,7 +195,10 @@ const CallsTable: FC = (): ReactElement => {
               </div>
             ))}
           </div>
-          <div className="bg-white divide-y divide-gray-200 relative">
+          <div
+            className="bg-white divide-y divide-gray-200 relative"
+            id="calls-table"
+          >
             {isPending && (
               <div className="absolute w-full h-full z-10 bg-[rgba(0,0,0,0.6)] flex items-center justify-center text-white">
                 Loading...
